@@ -13,19 +13,22 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  sdkDotnetVersion: '5.x'
+  rootDir: 'TailSpin.SpaceGame.Web/wwwroot'
+  projectLocation: '**/*.csproj'
 
 steps:
 - task: UseDotNet@2
   inputs:
     packageType: sdk
-    version: '5.x'
+    version: '$(sdkDotnetVersion)'
 
 - task: Npm@1
   displayName: 'Install npm'
   inputs:
    verbose: false
 
-- script: './node_modules/.bin/node-sass Tailspin.SpaceGame.Web/wwwroot --output Tailspin.SpaceGame.Web/wwwroot'
+- script: './node_modules/.bin/node-sass $(rootdir) --output $(rootdir)'
   displayName: 'Compile Sass assets'
 
 - task: gulp@1
@@ -33,36 +36,42 @@ steps:
 
 - script: 'echo "$(Build.BuildId), $(Build.DefinitionName), $(Build.BuildNumber)" > buildinfo.txt'
   displayName: 'write build info'
-  workingDirectory: Tailspin.SpaceGame.Web/wwwroot  
+  workingDirectory: '$(rootdir)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Restore project dependencies'
   inputs:
     command: 'restore'
-    projects: '**/*.csproj'
+    projects: '$(projectLocation)'
   
 - task: DotNetCoreCLI@2
   displayName: 'build project dependencies'
   inputs:
     command: 'build'
     arguments: '--no-restore --configuration Release'
-    projects: '**/*.csproj'
+    projects: '$(projectLocation)'
 
 - task: DotNetCoreCLI@2
   displayName: 'publish artifacts'
   inputs:
     command: 'publish'
-    projects: '**/*.csproj'
+    projects: '$(projectLocation)'
     publishWebProjects: false
     arguments: --no-build --configuration Release --output $(Build.ArtifactStagingDirectory)/Release
     zipAfterPublish: True
+
+- template: templates/build.yml
+  parameters:
+    buildConfiguration: 'Debug'
+    projectPath: '**/*.csproj'
+
+- template: templates/build.yml
+  parameters:
+    buildConfiguration: 'Release'
+    projectPath: '**/*.csproj'
 
 - task: PublishBuildArtifacts@1
   displayName: 'publish artifact'
   condition: Succeeded()
   inputs:
     ArtifactName: 'build'
-
-
-- task: PublishBuildArtifacts@1
-  displayName: 'publish build artifacts'
