@@ -13,7 +13,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  sdkDotnetVersion: '5.x'
+  sdkDotnetVersion: '5.8'
   rootDir: 'Tailspin.SpaceGame.Web/wwwroot'
   projectLocation: '**/*.csproj'
 
@@ -44,22 +44,6 @@ steps:
     command: 'restore'
     projects: '$(projectLocation)'
   
-- task: DotNetCoreCLI@2
-  displayName: 'build project dependencies'
-  inputs:
-    command: 'build'
-    arguments: '--no-restore --configuration Release'
-    projects: '$(projectLocation)'
-
-- task: DotNetCoreCLI@2
-  displayName: 'publish artifacts'
-  inputs:
-    command: 'publish'
-    projects: '$(projectLocation)'
-    publishWebProjects: false
-    arguments: --no-build --configuration Release --output $(Build.ArtifactStagingDirectory)/Release
-    zipAfterPublish: True
-
 - template: templates/build.yml
   parameters:
     buildConfiguration: 'Debug'
