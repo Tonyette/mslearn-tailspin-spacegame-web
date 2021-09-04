@@ -32,9 +32,7 @@ steps:
   displayName: echobuildname
 
 - script: 'echo $(Build.BuildId) $(Build.DefinitionName) > buildinfo.txt'
-  workingDirectory: Tailspin.Spacegame.Web/wwwroot
-
-- script: 'echo $(Build.BuildID)'   
+  workingDirectory: Tailspin.Spacegame.Web/wwwroot  
 
 - task: gulp@1
   displayName: 'Run gulp tasks'
