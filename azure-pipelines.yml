@@ -25,10 +25,10 @@ steps:
   inputs:
    verbose: false
 
-- script: './node_modules/.bin/node-sass Tailspin.Spacegame.Web/wwwroot --output  Tailspin.Spacegame.Web/wwwroot'
+- script: './node_modules/.bin/node-sass Tailspin.Spacegame.Web/wwwroot --output Tailspin.Spacegame.Web/wwwroot'
   displayName: 'Compile Sass assets'
 
-- script: 'echo "$(Build.BuildId), $(Build.DefinitionName), $(Build.BuildNumber)"> buildinfo.txt'
+- script: 'echo "$(Build.BuildId), $(Build.DefinitionName), $(Build.BuildNumber)" > buildinfo.txt'
   displayName: 'write build info'
   workingDirectory: Tailspin.Spacegame.Web/wwwroot  
 
