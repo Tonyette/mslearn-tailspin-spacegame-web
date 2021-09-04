@@ -47,12 +47,12 @@ steps:
 - template: templates/build.yml
   parameters:
     buildConfiguration: 'Debug'
-    projectPath: '**/*.csproj'
+    
 
 - template: templates/build.yml
   parameters:
     buildConfiguration: 'Release'
-    projectPath: '**/*.csproj'
+    
 
 - task: PublishBuildArtifacts@1
   displayName: 'publish artifact'
