@@ -20,6 +20,8 @@ steps:
 - task: UseDotNet@2
   inputs:
     version: '$(sdkDotnetVersion)'
+    performMultiLevelLookup: true
+    includePreviewVersions: true # Required for preview versions
 
 - task: Npm@1
   displayName: 'Install npm'
