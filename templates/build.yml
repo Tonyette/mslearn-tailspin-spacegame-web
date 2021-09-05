@@ -1,5 +1,6 @@
 parameters:
   buildConfiguration: 'Release'
+  sdkVersion: '5.0'
 
 
 
@@ -10,6 +11,7 @@ steps:
     command: 'restore'
     arguments: '--no-restore --configuration ${{ parameters.buildConfiguration }}'
     projects: '**/*.csproj'
+    
 
 - task: DotNetCoreCLI@2
   displayName: 'Publish project ${{ parameters.buildConfiguration }}'
