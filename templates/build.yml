@@ -1,6 +1,5 @@
 parameters:
   buildConfiguration: 'Release'
-  sdkVersion: '5.x'
 
 steps:
 - task: DotNetCoreCLI@2
@@ -12,7 +11,7 @@ steps:
     
 
 - task: DotNetCoreCLI@2
-  displayName: 'Publish project ${{ parameters.buildConfiguration }}'
+  displayName: 'Publish project - ${{ parameters.buildConfiguration }}'
   inputs:
     command: 'publish'
     arguments: '--no-build --configuration ${{ parameters.buildConfiguration }} --output $(Build.ArtifactStagingDirectory)/$ {{ parameters.buildConfiguration }}'
