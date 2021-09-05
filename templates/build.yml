@@ -1,14 +1,12 @@
 parameters:
   buildConfiguration: 'Release'
-  sdkVersion: '5.0'
-
-
+  sdkVersion: '5.x'
 
 steps:
 - task: DotNetCoreCLI@2
   displayName: 'Build pipeline'
   inputs: 
-    command: 'restore'
+    command: 'build'
     arguments: '--no-restore --configuration ${{ parameters.buildConfiguration }}'
     projects: '**/*.csproj'
     
