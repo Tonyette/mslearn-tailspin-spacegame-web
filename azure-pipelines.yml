@@ -13,9 +13,8 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  sdkDotnetVersion: '6.x'
+  sdkDotnetVersion: '5.x'
   rootDir: 'Tailspin.SpaceGame.Web/wwwroot'
-  projectLocation: '**/*.csproj'
 
 steps:
 - task: UseDotNet@2
@@ -45,7 +44,7 @@ steps:
   
 - template: templates/build.yml
   parameters:
-    buildConfiguration: 'Debug'
+    buildConfiguration: 'build'
     
 - template: templates/build.yml
   parameters:
