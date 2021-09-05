@@ -5,7 +5,7 @@ steps:
 
 - task: UseDotNet@2
   inputs:
-    version: '5.0.9'
+    version: '5.0.x'
 
 - task: DotNetCoreCLI@2
   displayName: 'Build pipeline'
