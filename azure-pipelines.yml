@@ -6,55 +6,61 @@
 trigger:
 - '*'
 
-pool:
-  vmImage: ubuntu-latest
-  demands:
-  - npm
+stages:
+- stage: 'build'
+  displayName: 'build application'
+  jobs:
+  - job: 'build'
+    displayName: 'build app'
+    pool:
+      vmImage: ubuntu-latest
+      demands:
+      - npm
 
-variables:
-  buildConfiguration: 'Release'
-  sdkDotnetVersion: '5.0.x'
-  rootDir: 'Tailspin.SpaceGame.Web/wwwroot'
+    variables:
+      buildConfiguration: 'Release'
+      sdkDotnetVersion: '5.0.x'
+      rootDir: 'Tailspin.SpaceGame.Web/wwwroot'
 
-steps:
-- task: UseDotNet@2
-  inputs:
-    version: '$(sdkDotnetVersion)'
-    performMultiLevelLookup: true
-    includePreviewVersions: true # Required for preview versions
+    steps:
+    - task: UseDotNet@2
+      inputs:
+        version: '$(sdkDotnetVersion)'
+        performMultiLevelLookup: true
+        includePreviewVersions: true # Required for preview versions
 
-- task: Npm@1
-  displayName: 'Install npm'
-  inputs:
-   verbose: false
+    - task: Npm@1
+      displayName: 'Install npm'
+      inputs:
+        verbose: false
 
-- script: './node_modules/.bin/node-sass $(rootDir) --output $(rootDir)'
-  displayName: 'Compile Sass assets'
+    - script: './node_modules/.bin/node-sass $(rootDir) --output $(rootDir)'
+      displayName: 'Compile Sass assets'
 
-- task: gulp@1
-  displayName: 'Run gulp tasks'
+    - task: gulp@1
+      displayName: 'Run gulp tasks'
 
-- script: 'echo "$(Build.BuildId), $(Build.DefinitionName), $(Build.BuildNumber)" > buildinfo.txt'
-  displayName: 'write build info'
-  workingDirectory: '$(rootdir)'
+    - script: 'echo "$(Build.BuildId), $(Build.DefinitionName), $(Build.BuildNumber)" > buildinfo.txt'
+      displayName: 'write build info'
+      workingDirectory: '$(rootdir)'
 
-- task: DotNetCoreCLI@2
-  displayName: 'Restore project dependencies'
-  inputs:
-    command: 'restore'
-    projects: '**/*.csproj'
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore project dependencies'
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
 
-- template: templates/build.yml
-  parameters:
-    buildConfiguration: 'Debug'
-    
-- template: templates/build.yml
-  parameters:
-    buildConfiguration: 'Release'
-    
+    - template: templates/build.yml
+      parameters:
+        buildConfiguration: 'Debug'
+        
+    - template: templates/build.yml
+      parameters:
+        buildConfiguration: 'Release'
+        
 
-- task: PublishBuildArtifacts@1
-  displayName: 'publish artifact'
-  condition: Succeeded()
-  inputs:
-    ArtifactName: 'build'
+    - task: PublishBuildArtifacts@1
+      displayName: 'publish artifact'
+      condition: Succeeded()
+      inputs:
+        ArtifactName: 'build'
